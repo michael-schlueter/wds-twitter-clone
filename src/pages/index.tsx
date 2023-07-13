@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import NewTweetForm from "~/components/NewTweetForm";
 import InfiniteTweetList from "~/components/InfiniteTweetList";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   return (
@@ -15,8 +16,19 @@ const Home: NextPage = () => {
 };
 
 const RecentTweets = () => {
-  const tweets = [];
-  return <InfiniteTweetList tweets={tweets} />
-}
+  const tweets = api.tweet.infiniteFeed.useInfiniteQuery(
+    {},
+    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  );
+  return (
+    <InfiniteTweetList
+      tweets={tweets.data?.pages.flatMap((page) => page.tweets)}
+      isError={tweets.isError}
+      isLoading={tweets.isLoading}
+      hasMore={tweets.hasNextPage}
+      fetchNewTweets={tweets.fetchNextPage}
+    />
+  );
+};
 
 export default Home;
