@@ -67,6 +67,8 @@ const TweetCard = ({
   likedByMe,
 }: Tweet) => {
   const trpcUtils = api.useContext();
+
+  // Instantly update the UI to show the tweet to be liked / not liked
   const toggleLike = api.tweet.toggleLike.useMutation({
     onSuccess: ({ addedLike }) => {
       const updateData: Parameters<

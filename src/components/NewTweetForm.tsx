@@ -45,6 +45,7 @@ function Form() {
         return;
       }
 
+      // Instantly update recent tweets with the new written tweet
       trpcUtils.tweet.infiniteFeed.setInfiniteData({}, (oldData) => {
         if (oldData == null || oldData.pages[0] == null) return;
 
